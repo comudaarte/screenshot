@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enviar Screenshot</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f9f9f9;
+            color: #333;
+        }
+        .container {
+            background-color: white;
+            border-radius: 8px;
+            padding: 25px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        h2 {
+            color: #2c3e50;
+            margin-top: 0;
+        }
+        .file-upload {
+            margin: 30px 0;
+        }
+        .file-upload input[type="file"] {
+            display: none;
+        }
+        .file-upload label {
+            background-color: #3498db;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            display: inline-block;
+            transition: background-color 0.3s;
+        }
+        .file-upload label:hover {
+            background-color: #2980b9;
+        }
+        #file-name {
+            margin-top: 10px;
+            font-size: 14px;
+            color: #7f8c8d;
+        }
+        button {
+            background-color: #2ecc71;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+            width: 100%;
+            max-width: 200px;
+        }
+        button:hover {
+            background-color: #27ae60;
+        }
+        button:disabled {
+            background-color: #95a5a6;
+            cursor: not-allowed;
+        }
+        .info-text {
+            font-size: 14px;
+            color: #7f8c8d;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Enviar Screenshot do Problema</h2>
+        <p>Selecione a imagem que mostra o problema que você está enfrentando</p>
+        
+        <!-- Formulário simplificado apenas com campo de upload -->
+        <form action="https://seu-n8n.exemplo.com/webhook/problema" method="post" enctype="multipart/form-data" id="upload-form">
+            <!-- Campo oculto para ID de conversa (opcional) -->
+            <input type="hidden" id="conversation_id" name="conversation_id" value="">
+            
+            <div class="file-upload">
+                <label for="screenshot">
+                    <i class="fa fa-cloud-upload"></i> Selecionar Imagem
+                </label>
+                <input type="file" id="screenshot" name="screenshot" accept="image/*" onchange="updateFileName()">
+                <div id="file-name">Nenhum arquivo selecionado</div>
+            </div>
+            
+            <button type="submit" id="submit-btn" disabled>Enviar</button>
+        </form>
+        
+        <p class="info-text">Formatos aceitos: JPG, PNG, GIF (máx. 5MB)</p>
+    </div>
+
+    <script>
+        // Atualiza o nome do arquivo quando selecionado
+        function updateFileName() {
+            const input = document.getElementById('screenshot');
+            const fileNameDisplay = document.getElementById('file-name');
+            const submitBtn = document.getElementById('submit-btn');
+            
+            if (input.files.length > 0) {
+                const fileName = input.files[0].name;
+                fileNameDisplay.textContent = fileName;
+                submitBtn.disabled = false;
+            } else {
+                fileNameDisplay.textContent = 'Nenhum arquivo selecionado';
+                submitBtn.disabled = true;
+            }
+        }
+        
+        // Opcional: Capturar ID da conversa da URL
+        window.onload = function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const conversationId = urlParams.get('conversation_id');
+            if (conversationId) {
+                document.getElementById('conversation_id').value = conversationId;
+            }
+        };
+    </script>
+</body>
+</html>
